@@ -1,0 +1,32 @@
+{{- if .Values.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    prometheus: {{ .Values.prometheus }}
+spec:
+  jobLabel: app
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+      release: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace | quote }}
+  endpoints:
+  - basicAuth:
+      password:
+        name: {{ template "fullname" . }}
+        key: password
+      username:
+        name: {{ template "fullname" . }}
+        key: user
+    port: {{ .Values.service.name }}
+    interval: 30s
+{{- end }}

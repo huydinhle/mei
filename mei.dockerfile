@@ -1,0 +1,8 @@
+FROM alpine:3.7
+
+ARG VERSION="$VERSION"
+ENV VERSION="$VERSION"
+
+COPY mei /
+
+ENTRYPOINT ["/mei"]

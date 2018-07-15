@@ -1,0 +1,2 @@
+GET http://192.168.99.100:80
+Host: mei.local
